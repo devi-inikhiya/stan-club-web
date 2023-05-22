@@ -2,17 +2,6 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import AgoraRTC from "agora-rtc-sdk-ng";
 
-let options = {
-  // Pass your App ID here.
-  appId: "7a15a1b80fd243fdac1324a4b878363b",
-  // Set the channel name.
-  channel: "",
-  // Pass your temp token here.
-  token: "",
-  // Set the user ID.
-  uid: 0,
-};
-
 let channelParameters = {
   // A variable to hold a local audio track.
   localAudioTrack: null,
@@ -24,6 +13,9 @@ let channelParameters = {
 
 function App() {
   const [count, setCount] = useState(0);
+  const [channel, setchannel] = useState("");
+  const [token, settoken] = useState("");
+  const [uid, setuid] = useState(0);
   const agoraEngine = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
 
   async function startBasicCall() {
@@ -56,6 +48,16 @@ function App() {
   }, []);
 
   const joinChannel = async () => {
+    let options = {
+      // Pass your App ID here.
+      appId: "7a15a1b80fd243fdac1324a4b878363b",
+      // Set the channel name.
+      channel: channel,
+      // Pass your temp token here.
+      token: token,
+      // Set the user ID.
+      uid: uid,
+    };
     await agoraEngine.join(
       options.appId,
       options.channel,
@@ -77,22 +79,47 @@ function App() {
 
   return (
     <>
-      <div>
+      <div style={{
+        display: "flex",
+        flexDirection: "column",
+        background:'aqua',
+        width:'100%',
+        maxWidth:'500px',
+      }}
+      >
+        <input type="text" style={{
+          margin:'10px',
+          padding:'10px', 
+          border:"none",
+        }} 
+        placeholder="channel name"
+         onChange={(e) => setchannel(e.target.value)} />
+        <input type="text" style={{ 
+          margin:'10px',  
+          padding:'10px', 
+          border:"none",  
+        }}
+          placeholder="token"
+          onChange={(e) => settoken(e.target.value)}  
+        />  
+        <input type="text" style={{ 
+          margin:'10px',  
+          padding:'10px', 
+          border:"none",  
+        }}  
+          placeholder="uid"   
+          onChange={(e) => setuid(e.target.value)}  
+        />  
+
+
+        <button onClick={joinChannel} style={{
+          margin:'10px',
+          padding:'10px', 
+          border:"none",  
+        }}
+        >Join Channel</button>
+        <button onClick={leaveChannel}>Leave Channel</button>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-      <button onClick={joinChannel}>Join Channel</button>
-      <button onClick={leaveChannel}>Leave Channel</button>
     </>
   );
 }

@@ -12,7 +12,6 @@ let channelParameters = {
 };
 
 function App() {
-  const [count, setCount] = useState(0);
   const [channel, setchannel] = useState("");
   const [token, settoken] = useState("");
   const [uid, setuid] = useState(0);
@@ -58,6 +57,7 @@ function App() {
       // Set the user ID.
       uid: uid,
     };
+    console.log(options);
     await agoraEngine.join(
       options.appId,
       options.channel,
